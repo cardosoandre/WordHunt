@@ -222,8 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wordsSource: {fileID: 4900000, guid: 9861ae3fc9d168041b6595d0133a3063, type: 3}
   words: []
-  gridSize: {x: 9, y: 9}
-  cellSize: {x: 30, y: 30}
+  gridSize: {x: 20, y: 20}
+  cellSize: {x: 40, y: 40}
   cellSpacing: {x: 0, y: 0}
   letterPrefab: {fileID: 1260658026534292, guid: fc17916b22aa5e545b4587c72be16da5,
     type: 2}
@@ -356,7 +356,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 4
   m_StartCorner: 0
-  m_StartAxis: 0
+  m_StartAxis: 1
   m_CellSize: {x: 40, y: 40}
   m_Spacing: {x: 3, y: 3}
   m_Constraint: 0

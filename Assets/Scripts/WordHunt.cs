@@ -135,7 +135,12 @@ public class WordHunt : MonoBehaviour {
             lettersGrid[(i * dirX) + row, (i * dirY) + column] = word[i].ToString();
             Transform t = lettersTransforms[(i * dirX) + row, (i * dirY) + column];
             t.GetComponentInChildren<Text>().text = word[i].ToString().ToUpper();
+            t.GetComponent<Image>().color = Color.red;
         }
+
+        Debug.Log(word + " " + "WAS INSERTED");
+
+
         return true;
     }
 
