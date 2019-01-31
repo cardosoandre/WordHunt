@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class WordHunt : MonoBehaviour {
 
+    public static WordHunt instance;
+
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
+    private string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     [Header("Text Asset")]
     public TextAsset wordsSource;
@@ -27,8 +31,19 @@ public class WordHunt : MonoBehaviour {
 
     [Header("Public References")]
     public GameObject letterPrefab;
+    [Space]
 
-    private string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    [Header("Game Detection")]
+    public string word;
+    public Vector2 orig;
+    public Vector2 dir;
+    public bool activated;
+    private List<Transform> highlightedObjects = new List<Transform>();
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -135,11 +150,8 @@ public class WordHunt : MonoBehaviour {
             lettersGrid[(i * dirX) + row, (i * dirY) + column] = word[i].ToString();
             Transform t = lettersTransforms[(i * dirX) + row, (i * dirY) + column];
             t.GetComponentInChildren<Text>().text = word[i].ToString().ToUpper();
-            t.GetComponent<Image>().color = Color.red;
+            t.GetComponent<Image>().color = Color.grey;
         }
-
-        Debug.Log(word + " " + "WAS INSERTED");
-
 
         return true;
     }
@@ -206,4 +218,119 @@ public class WordHunt : MonoBehaviour {
             }
         }
     }
+
+    public void LetterClick(int x, int y, bool state)
+    {
+        activated = state;
+        orig = state ? new Vector2(x, y) : orig;
+        dir = state ? dir : new Vector2(-1, -1);
+
+        if (!state)
+        {
+            ValidateWord();
+        }
+
+    }
+
+    private void ValidateWord()
+    {
+        word = string.Empty;
+
+        foreach (Transform t in highlightedObjects)
+        {
+            word += t.GetComponentInChildren<Text>().text.ToLower();
+        }
+
+        if(words.Contains(word) || words.Contains(Reverse(word)))
+        {
+            foreach (Transform h in highlightedObjects)
+            {
+                h.GetComponent<Button>().interactable = false;
+                h.GetComponent<Image>().color = Color.white;
+            }
+        }
+        else {
+            ClearWordSelection();
+        }
+    }
+
+    public void LetterHover(int x, int y)
+    {
+        if (activated)
+        {
+            dir = new Vector2(x, y);
+            if (IsLetterAligned(x, y))
+            {
+                HighlightSelectedLetters(x,y);
+            }
+        }
+    }
+
+    private void HighlightSelectedLetters(int x, int y)
+    {
+
+        ClearWordSelection();
+
+        if (x == orig.x)
+        {
+            int min = (int)Math.Min(y, orig.y);
+            int max = (int)Math.Max(y, orig.y);
+
+            for (int i = min; i <= max; i++)
+            {
+                lettersTransforms[x, i].GetComponent<Image>().color = Color.red;
+                highlightedObjects.Add(lettersTransforms[x, i]);
+            }
+        }
+        else if (y == orig.y)
+        {
+            int min = (int)Math.Min(x, orig.x);
+            int max = (int)Math.Max(x, orig.x);
+
+            for (int i = min; i <= max; i++)
+            {
+                lettersTransforms[i, y].GetComponent<Image>().color = Color.red;
+                highlightedObjects.Add(lettersTransforms[i, y]);
+            }
+        }
+        else
+        {
+
+            // Increment according to direction (left and up decrement)
+            int incX = (orig.x > x) ? -1 : 1;
+            int incY = (orig.y > y) ? -1 : 1;
+            int steps = (int)Math.Abs(orig.x - x);
+
+            // Paints from (orig.x, orig.y) to (x, y)
+            for (int i = 0, curX = (int)orig.x, curY = (int)orig.y; i <= steps; i++, curX += incX, curY += incY)
+            {
+                lettersTransforms[curX, curY].GetComponent<Image>().color = Color.red;
+                highlightedObjects.Add(lettersTransforms[curX, curY]);
+            }
+        }
+
+    }
+
+    private void ClearWordSelection()
+    {
+        foreach (Transform h in highlightedObjects)
+        {
+            h.GetComponent<Image>().color = Color.white;
+        }
+
+        highlightedObjects.Clear();
+    }
+
+    public bool IsLetterAligned(int x, int y)
+    {
+        return (orig.x == x || orig.y == y || Math.Abs(orig.x - x) == Math.Abs(orig.y - y));
+    }
+
+    public static string Reverse(string s)
+    {
+        char[] charArray = s.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
+    }
+
 }
