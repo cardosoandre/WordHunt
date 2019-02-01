@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class WordHunt : MonoBehaviour {
 
@@ -20,6 +21,7 @@ public class WordHunt : MonoBehaviour {
 
     [Header("List of Words")]
     public List<string> words = new List<string>();
+    public List<string> insertedWords = new List<string>();
     [Header("Grid Settings")]
     public Vector2 gridSize;
     [Space]
@@ -55,8 +57,10 @@ public class WordHunt : MonoBehaviour {
         InsertWordsOnGrid();
 
         RandomizeEmptyCells();
-    }
 
+        DisplaySelectedWords();
+
+    }
 
     private void PrepareWords()
     {
@@ -136,6 +140,9 @@ public class WordHunt : MonoBehaviour {
                 tryAmount++;
 
             } while (!inserted && tryAmount < 100);
+
+            if (inserted)
+                insertedWords.Add(word);
         }
     }
 
@@ -150,7 +157,7 @@ public class WordHunt : MonoBehaviour {
             lettersGrid[(i * dirX) + row, (i * dirY) + column] = word[i].ToString();
             Transform t = lettersTransforms[(i * dirX) + row, (i * dirY) + column];
             t.GetComponentInChildren<Text>().text = word[i].ToString().ToUpper();
-            t.GetComponent<Image>().color = Color.grey;
+            //t.GetComponent<Image>().color = Color.grey;
         }
 
         return true;
@@ -241,12 +248,23 @@ public class WordHunt : MonoBehaviour {
             word += t.GetComponentInChildren<Text>().text.ToLower();
         }
 
-        if(words.Contains(word) || words.Contains(Reverse(word)))
+        if(insertedWords.Contains(word) || insertedWords.Contains(Reverse(word)))
         {
             foreach (Transform h in highlightedObjects)
             {
                 h.GetComponent<Button>().interactable = false;
                 h.GetComponent<Image>().color = Color.white;
+                h.transform.DOPunchScale(-Vector3.one, 0.2f, 10, 1);
+            }
+
+            ScrollViewWords.instance.CheckWord(word);
+
+            insertedWords.Remove(word);
+            insertedWords.Remove(Reverse(word));
+
+            if(insertedWords.Count <= 0)
+            {
+                print("FINISH");
             }
         }
         else {
@@ -324,6 +342,14 @@ public class WordHunt : MonoBehaviour {
     public bool IsLetterAligned(int x, int y)
     {
         return (orig.x == x || orig.y == y || Math.Abs(orig.x - x) == Math.Abs(orig.y - y));
+    }
+
+    private void DisplaySelectedWords()
+    {
+        for (int i = 0; i < insertedWords.Count; i++)
+        {
+            ScrollViewWords.instance.SpawnWordCell(insertedWords[i]);
+        }
     }
 
     public static string Reverse(string s)
