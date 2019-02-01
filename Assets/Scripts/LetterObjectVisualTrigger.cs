@@ -19,7 +19,6 @@ public class LetterObjectVisualTrigger : MonoBehaviour {
     private void Start()
     {
         transform.DOScale(0, .5f).SetEase(Ease.OutBack).From();
-        transform.DORotate(Vector3.forward * 90, .5f, RotateMode.LocalAxisAdd).SetEase(Ease.OutBack).From();
     }
 
     public void MouseDown()

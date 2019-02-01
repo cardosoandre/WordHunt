@@ -15,8 +15,13 @@ public class WordHunt : MonoBehaviour {
     private Transform[,] lettersTransforms;
     private string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
+    [Header("Settings")]
+    public bool invertedWordsAreValid;
+
     [Header("Text Asset")]
     public TextAsset wordsSource;
+    public bool filterBadWords;
+    public TextAsset badWordsSource;
     [Space]
 
     [Header("List of Words")]
@@ -33,6 +38,7 @@ public class WordHunt : MonoBehaviour {
 
     [Header("Public References")]
     public GameObject letterPrefab;
+    public Transform gridTransform;
     [Space]
 
     [Header("Game Detection")]
@@ -66,6 +72,19 @@ public class WordHunt : MonoBehaviour {
     {
         //Pegar lista de palavras
         words = wordsSource.text.Split(',').ToList();
+
+        //Filtrar palavrões e etc..
+        if (filterBadWords)
+        {
+            List<string> badWords = badWordsSource.text.Split(',').ToList();
+            for (int i = 0; i < badWords.Count(); i++)
+            {
+                if(words.Contains(badWords[i])){
+                    words.Remove(badWords[i]);
+                    print("palavra ofensiva <b>" + badWords[i] + "</b> <color=red> removida</color>");
+                }
+            }
+        }
 
         //Filtrar as palavras que cabem na grid
         int maxGridDimension = Mathf.Max((int)gridSize.x, (int)gridSize.y);
@@ -103,7 +122,7 @@ public class WordHunt : MonoBehaviour {
 
     void ApplyGridSettings()
     {
-        GridLayoutGroup gridLayout = transform.GetChild(0).GetComponent<GridLayoutGroup>();
+        GridLayoutGroup gridLayout = gridTransform.GetComponent<GridLayoutGroup>();
 
         gridLayout.cellSize = cellSize;
         gridLayout.spacing = cellSpacing;
@@ -132,8 +151,14 @@ public class WordHunt : MonoBehaviour {
 
                 while (dirX == 0 && dirY == 0)
                 {
-                    dirX = rn.Next(3) - 1;
-                    dirY = rn.Next(3) - 1;
+                    if (invertedWordsAreValid)
+                    {
+                        dirX = rn.Next(3) - 1;
+                        dirY = rn.Next(3) - 1;
+                    }else{
+                        dirX = rn.Next(2);
+                        dirY = rn.Next(2);
+                    }
                 }
 
                 inserted = InsertWord(word, row, column, dirX, dirY);
@@ -257,6 +282,8 @@ public class WordHunt : MonoBehaviour {
                 h.transform.DOPunchScale(-Vector3.one, 0.2f, 10, 1);
             }
 
+            print("<b>" + word.ToUpper() + "</b> was found!");
+
             ScrollViewWords.instance.CheckWord(word);
 
             insertedWords.Remove(word);
@@ -346,9 +373,12 @@ public class WordHunt : MonoBehaviour {
 
     private void DisplaySelectedWords()
     {
+        float delay = 0;
+
         for (int i = 0; i < insertedWords.Count; i++)
         {
-            ScrollViewWords.instance.SpawnWordCell(insertedWords[i]);
+            ScrollViewWords.instance.SpawnWordCell(insertedWords[i], delay);
+            delay += .05f;
         }
     }
 

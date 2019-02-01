@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311992, g: 0.38074034, b: 0.35872713, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -146,7 +146,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.71238863, g: 0.8301887, b: 0.6069776, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -224,6 +224,69 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &777829243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 777829244}
+  - component: {fileID: 777829246}
+  m_Layer: 5
+  m_Name: WorldHunt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &777829244
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 777829243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1415011456}
+  - {fileID: 916898455}
+  m_Father: {fileID: 1310162944}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &777829246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 777829243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81086182dd9435a419f9d072cb3d7964, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invertedWordsAreValid: 0
+  wordsSource: {fileID: 4900000, guid: 9861ae3fc9d168041b6595d0133a3063, type: 3}
+  filterBadWords: 1
+  badWordsSource: {fileID: 4900000, guid: 7cf75c72525c24a9697c56fc960ccb84, type: 3}
+  words: []
+  insertedWords: []
+  gridSize: {x: 7, y: 7}
+  cellSize: {x: 40, y: 40}
+  cellSpacing: {x: 1, y: 1}
+  letterPrefab: {fileID: 1260658026534292, guid: fc17916b22aa5e545b4587c72be16da5,
+    type: 2}
+  gridTransform: {fileID: 1415011456}
+  word: 
+  orig: {x: -1, y: -1}
+  dir: {x: -1, y: -1}
+  activated: 0
 --- !u!1 &916898454
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,19 +312,19 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 916898454}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1363234449}
   - {fileID: 1055614021}
   - {fileID: 2001633158}
-  m_Father: {fileID: 1310162944}
+  m_Father: {fileID: 777829244}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 187, y: 0}
+  m_AnchoredPosition: {x: 220, y: 0}
   m_SizeDelta: {x: 200, y: 335.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916898456
@@ -375,7 +438,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000007978758, y: 0.000015192862}
+  m_AnchoredPosition: {x: 0.000007978758, y: 0.000019751407}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &987600461
@@ -575,7 +638,6 @@ GameObject:
   - component: {fileID: 1310162943}
   - component: {fileID: 1310162942}
   - component: {fileID: 1310162941}
-  - component: {fileID: 1310162940}
   - component: {fileID: 1310162945}
   m_Layer: 5
   m_Name: Canvas
@@ -584,29 +646,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1310162940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1310162939}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81086182dd9435a419f9d072cb3d7964, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wordsSource: {fileID: 4900000, guid: 9861ae3fc9d168041b6595d0133a3063, type: 3}
-  words: []
-  insertedWords: []
-  gridSize: {x: 7, y: 7}
-  cellSize: {x: 40, y: 40}
-  cellSpacing: {x: 1, y: 1}
-  letterPrefab: {fileID: 1260658026534292, guid: fc17916b22aa5e545b4587c72be16da5,
-    type: 2}
-  word: 
-  orig: {x: -1, y: -1}
-  dir: {x: 0, y: 0}
-  activated: 0
 --- !u!114 &1310162941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,8 +713,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1415011456}
-  - {fileID: 916898455}
+  - {fileID: 777829244}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -801,18 +839,18 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1415011455}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1310162944}
+  m_Father: {fileID: 777829244}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -164, y: 0}
+  m_AnchoredPosition: {x: -270, y: 0}
   m_SizeDelta: {x: 100, y: 0}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1415011457
 MonoBehaviour:
   m_ObjectHideFlags: 0
