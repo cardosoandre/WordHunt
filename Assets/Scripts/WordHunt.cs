@@ -11,6 +11,12 @@ public class WordHunt : MonoBehaviour {
 
     public static WordHunt instance;
 
+    public delegate void VisualEvents(RectTransform original, RectTransform final);
+    public static event VisualEvents FoundWord;
+
+    public delegate void Events();
+    public static event Events Finish;
+
     private string[,] lettersGrid;
     private Transform[,] lettersTransforms;
     private string alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -46,16 +52,17 @@ public class WordHunt : MonoBehaviour {
     public Vector2 orig;
     public Vector2 dir;
     public bool activated;
-    private List<Transform> highlightedObjects = new List<Transform>();
+
+    [HideInInspector]
+    public List<Transform> highlightedObjects = new List<Transform>();
 
     private void Awake()
     {
         instance = this;
     }
 
-    void Start()
-    {
-
+    public void Setup(){
+        
         PrepareWords();
 
         InitializeGrid();
@@ -291,10 +298,14 @@ public class WordHunt : MonoBehaviour {
         {
             foreach (Transform h in highlightedObjects)
             {
-                h.GetComponent<Button>().interactable = false;
                 h.GetComponent<Image>().color = Color.white;
                 h.transform.DOPunchScale(-Vector3.one, 0.2f, 10, 1);
             }
+
+            //Visual Event
+            RectTransform r1 = highlightedObjects[0].GetComponent<RectTransform>();
+            RectTransform r2 = highlightedObjects[highlightedObjects.Count() - 1].GetComponent<RectTransform>();
+            FoundWord(r1, r2);
 
             print("<b>" + word.ToUpper() + "</b> was found!");
 
@@ -305,7 +316,7 @@ public class WordHunt : MonoBehaviour {
 
             if(insertedWords.Count <= 0)
             {
-                print("FINISH");
+                Finish();
             }
         }
         else {
@@ -330,6 +341,8 @@ public class WordHunt : MonoBehaviour {
 
         ClearWordSelection();
 
+        Color selectColor = HighlightBehaviour.instance.colors[HighlightBehaviour.instance.colorCounter];
+
         if (x == orig.x)
         {
             int min = (int)Math.Min(y, orig.y);
@@ -337,7 +350,7 @@ public class WordHunt : MonoBehaviour {
 
             for (int i = min; i <= max; i++)
             {
-                lettersTransforms[x, i].GetComponent<Image>().color = Color.red;
+                lettersTransforms[x, i].GetComponent<Image>().color = selectColor;
                 highlightedObjects.Add(lettersTransforms[x, i]);
             }
         }
@@ -348,7 +361,7 @@ public class WordHunt : MonoBehaviour {
 
             for (int i = min; i <= max; i++)
             {
-                lettersTransforms[i, y].GetComponent<Image>().color = Color.red;
+                lettersTransforms[i, y].GetComponent<Image>().color = selectColor;
                 highlightedObjects.Add(lettersTransforms[i, y]);
             }
         }
@@ -363,7 +376,7 @@ public class WordHunt : MonoBehaviour {
             // Paints from (orig.x, orig.y) to (x, y)
             for (int i = 0, curX = (int)orig.x, curY = (int)orig.y; i <= steps; i++, curX += incX, curY += incY)
             {
-                lettersTransforms[curX, curY].GetComponent<Image>().color = Color.red;
+                lettersTransforms[curX, curY].GetComponent<Image>().color = selectColor;
                 highlightedObjects.Add(lettersTransforms[curX, curY]);
             }
         }

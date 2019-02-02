@@ -38,7 +38,10 @@ public class ScrollViewWords : MonoBehaviour {
 
             if (t.text.ToLower() == word || t.text.ToLower() == WordHunt.Reverse(word))
             {
-                scrollViewContent.GetChild(i).GetComponent<Image>().color = Color.green;
+                HighlightBehaviour highlight = HighlightBehaviour.instance;
+                int counter = (highlight.colorCounter == 0) ? (highlight.colors.Length-1) : (highlight.colorCounter - 1);
+                scrollViewContent.GetChild(i).GetComponent<Image>().color = highlight.colors[counter];
+                scrollViewContent.GetChild(i).DOPunchScale(Vector3.one, 0.2f, 10, 1);
             }
         }
     }
