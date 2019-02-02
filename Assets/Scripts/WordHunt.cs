@@ -86,6 +86,18 @@ public class WordHunt : MonoBehaviour {
             }
         }
 
+        //Randomizar palavras
+        for (int i = 0; i < words.Count; i++)
+        {
+            string temp = words[i];
+
+            System.Random rn = new System.Random();
+
+            int randomIndex = rn.Next(words.Count());
+            words[i] = words[randomIndex];
+            words[randomIndex] = temp;
+        }
+
         //Filtrar as palavras que cabem na grid
         int maxGridDimension = Mathf.Max((int)gridSize.x, (int)gridSize.y);
 
@@ -130,6 +142,8 @@ public class WordHunt : MonoBehaviour {
         int cellSizeX = (int)gridLayout.cellSize.x + (int)gridLayout.spacing.x;
 
         transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(cellSizeX * gridSize.x, 0);
+
+
     }
 
     void InsertWordsOnGrid()

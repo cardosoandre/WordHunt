@@ -20,14 +20,14 @@ public class ScrollViewWords : MonoBehaviour {
 
         WordHunt wh = WordHunt.instance;
 
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, (wh.cellSize.y * wh.gridSize.y + wh.cellSpacing.y));
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, (wh.cellSize.y + wh.cellSpacing.y) * wh.gridSize.y);
     }
 
     public void SpawnWordCell(string word,float delay)
     {
         GameObject cell = Instantiate(wordCellPrefab, scrollViewContent);
         cell.GetComponentInChildren<Text>().text = word.ToUpper();
-        cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutSine).From().SetDelay(delay);
+        cell.transform.DOScale(0, 0.3f).SetEase(Ease.OutBack).From().SetDelay(delay);
     }
 
     public void CheckWord(string word)
